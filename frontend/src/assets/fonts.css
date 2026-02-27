@@ -1,0 +1,15 @@
+@font-face {
+	font-family: 'MiSans';
+	font-weight: 400;
+	src: url('fonts/MiSans-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'MiSans';
+	font-weight: 500;
+	src: url('fonts/MiSans-Medium.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'MiSans';
+	font-weight: 700;
+	src: url('fonts/MiSans-Bold.ttf') format('truetype');
+}
