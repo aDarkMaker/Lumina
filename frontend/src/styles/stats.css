@@ -1,0 +1,39 @@
+.stats-container {
+	display: flex;
+	padding: 0 24px;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.stat-card {
+	flex: 1;
+	background-color: var(--card-color);
+	padding: 16px 12px;
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.stat-value {
+	font-size: 24px;
+	margin-bottom: 4px;
+}
+
+.stat-label {
+	font-size: 12px;
+	color: var(--text-secondary);
+}
+
+.text-green {
+	color: var(--accent-color);
+}
+
+.text-red {
+	color: var(--danger-color);
+}
+
+.text-white {
+	color: var(--text-primary);
+}

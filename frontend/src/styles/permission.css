@@ -1,0 +1,88 @@
+.section-title {
+	font-size: 18px;
+	margin-bottom: 16px;
+	padding: 0 2px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.section-title span:last-child {
+	font-size: 14px;
+	color: var(--accent-color);
+}
+
+.permission-item {
+	background-color: var(--card-color);
+	border-radius: 16px;
+	padding: 16px;
+	margin-bottom: 12px;
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	align-items: center;
+}
+
+.perm-icon {
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.05);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+}
+.perm-icon i {
+	font-size: 1.25rem;
+}
+
+.perm-content {
+	flex: 1;
+}
+
+.perm-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 6px;
+}
+
+.perm-name {
+	font-size: 16px;
+}
+
+.perm-desc {
+	font-size: 13px;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.perm-toggle-placeholder {
+	font-size: 11px;
+	color: var(--accent-color);
+	white-space: nowrap;
+}
+
+.risk-badge {
+	font-size: 10px;
+	padding: 2px 8px;
+	border-radius: 100px;
+	text-transform: uppercase;
+}
+
+.risk-high {
+	background-color: rgba(255, 77, 79, 0.15);
+	color: var(--danger-color);
+}
+
+.risk-normal {
+	background-color: rgba(39, 199, 92, 0.15);
+	color: var(--accent-color);
+}
+
+.risk-medium {
+	background-color: rgba(250, 173, 20, 0.15);
+	color: var(--warning-color);
+}

@@ -1,0 +1,48 @@
+.header {
+	padding: 24px 24px 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: var(--bg-color);
+	z-index: 10;
+}
+
+.header-left {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.back-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	color: var(--text-primary);
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+.back-btn i {
+	font-size: inherit;
+}
+
+.header-title {
+	font-size: 20px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.header-dot {
+	width: 4px;
+	height: 4px;
+	border-radius: 999px;
+	background-color: var(--text-secondary);
+}

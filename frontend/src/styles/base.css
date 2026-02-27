@@ -1,0 +1,36 @@
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--bg-color: #1d1d1d;
+	--card-color: #2d2d2d;
+	--text-primary: #ffffff;
+	--text-secondary: #b0b0b0;
+	--accent-color: #27c75c;
+	--accent-hover: #21a84d;
+	--danger-color: #ff4d4f;
+	--warning-color: #faad14;
+	--border-color: #3d3d3d;
+	--font-family-sans: 'MiSans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+	font-family: var(--font-family-sans);
+	background-color: var(--bg-color);
+	color: var(--text-primary);
+	width: 100%;
+	min-height: 100vh;
+	min-height: 100dvh;
+	overflow: hidden;
+	-webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
+}
