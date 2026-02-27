@@ -1,46 +1,57 @@
-# 烛照 / Lumina
+<div align="center">
+  # 烛照 / Lumina
 
-面向安卓优先、后续支持 iOS 的「应用权限与隐私条款风险分析」工具。
+  ![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge&logo=android)
+  ![iOS](https://img.shields.io/badge/iOS-计划中-lightgrey?style=for-the-badge&logo=apple)
+  ![React](https://img.shields.io/badge/React-18+-blue?style=for-the-badge&logo=react)
+  ![Go](https://img.shields.io/badge/Go-后端-00ADD8?style=for-the-badge&logo=go)
 
-应用在本地分析手机上已安装应用的权限使用情况与隐私条款内容，给出高危/中等/常规等风险分级，并提供直观的应用详情界面。
+  **移动端应用权限与隐私政策风险分析工具**
+  <br />
 
-## 总体结构
+  [English](README_en.md) • **中文说明**
+</div>
 
-仓库采用 monorepo 形式，主要包含：
+---
 
-- `frontend/`：Web 前端（React + TS + Bun），用于规则管理后台和交互原型。
-- `mobile/`：移动端 App（计划使用 React Native + TypeScript），安卓先行，后续支持 iOS。
-- `backend/`：后端服务（Go），负责规则配置、版本发布、可选的匿名统计与账号体系。
+## 1. 项目简介
 
-## 技术栈
+Lumina（烛照）是一款面向移动端的**应用权限与隐私政策风险分析**工具，当前以 Android 为主要支持平台，iOS 支持处于规划阶段。
 
-### Frontend (`frontend/`)
+本产品在**设备本地**完成已安装应用的权限使用情况与隐私政策文本的分析，并依据预设规则输出高 / 中 / 低等风险等级及说明，同时提供结构化应用详情展示。规则与版本由服务端及 Web 管理后台维护，移动端仅拉取规则配置，**不向服务端上传用户敏感原始数据**。
 
-- React + TypeScript
-- Bun
-- Cspell + Prettier + Eslint
+本工具仅供个人或合规场景下的权限与隐私风险认知使用，禁止用于任何商业或营利目的。欢迎通过 Issue 或 Pull Request 反馈问题与贡献代码。使用或参与本项目即视为同意上述约定。
 
-### Mobile (`mobile/`)
+## 2. 快速开始
 
-- React Native + TypeScript
-- Android 原生：Kotlin（用于权限扫描等 Native Module）
-- iOS 原生：Swift（后续引入）
+1. **克隆仓库**：执行 `git clone <repo-url>`，并进入项目根目录 `Lumina`。
+2. **前端（规则管理后台）**：进入 `frontend/`，执行 `bun install` 与 `bun run dev` 启动开发环境。
+3. **后端**：进入 `backend/`，按 `backend/README.md` 中的说明配置运行环境并启动服务。
+4. **移动端**：进入 `mobile/`，按 React Native 项目规范安装依赖并运行（当前以 Android 为主）。
 
-### Backend (`backend/`)
+## 3. 项目结构
 
-- Go
-- Web 框架：Gin（RESTful API）
-- 数据库：PostgreSQL（或开发期 SQLite）
+- **`frontend/`**：Web 前端（React + TypeScript + Bun），用于规则管理后台及交互原型。
+- **`mobile/`**：移动端应用（React Native + TypeScript），优先支持 Android，iOS 为规划中。
+- **`backend/`**：后端服务（Go + Gin），负责规则配置、版本发布及可选的匿名统计与账号体系。
 
-## 核心模块概览
+## 4. 功能概述
 
-- **本地扫描模块（移动端）**：读取已安装应用列表及权限信息（不需要 Root），并在本地生成权限画像。
-- **隐私条款本地分析模块**：在本地解析用户粘贴或分享过来的隐私条款文本，通过规则+关键词匹配做风险判定。
-- **本地风险规则引擎**：将「权限组合 + 隐私条款分析」映射为 High/Medium/Normal 等风险等级与解释文案。
-- **规则中心（Go Backend + Web 管理台）**：维护和发布不同地区/系统版本下的规则集，移动端只拉取规则，不上传敏感原始数据。
+- **本地扫描模块（移动端）**：在无需 Root 的前提下，读取已安装应用列表及权限信息，于本地生成权限画像。
+- **隐私政策本地分析**：在设备本地解析用户提供的隐私政策文本，基于规则与关键词匹配进行风险判定。
+- **本地风险规则引擎**：将权限组合与隐私政策分析结果映射为 High / Medium / Normal 等风险等级及对应说明文案。
+- **规则中心（后端 + Web 管理台）**：维护并发布按地区与系统版本划分的规则集；移动端仅拉取规则，不上传敏感原始数据。
 
-更多详细设计请参考：
+## 5. 技术栈
 
-- `backend/README.md`：后端模块与 API 规划。
-- `docs/rules-engine-spec.md`：本地规则引擎数据结构与评分逻辑。
-- `docs/ROADMAP.md`：开发里程碑与路线图。
+| 模块 | 技术 |
+|------|------|
+| Frontend | React、TypeScript、Bun、Cspell、Prettier、ESLint |
+| Mobile | React Native、TypeScript；Android：Kotlin（权限扫描等）；iOS：Swift（计划中） |
+| Backend | Go、Gin、PostgreSQL（开发期可用 SQLite） |
+
+## 6. 相关文档
+
+- [backend/README.md](backend/README.md) — 后端模块与 API 说明
+- [docs/rules-engine-spec.md](docs/rules-engine-spec.md) — 规则引擎数据结构与评分逻辑
+- [docs/ROADMAP.md](docs/ROADMAP.md) — 开发路线图与里程碑
