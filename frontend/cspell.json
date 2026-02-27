@@ -1,8 +1,4 @@
 {
-    "words": [
-        "Avenir"
-    ],
-    "ignorePaths": [
-        ".gitignore"
-    ]
+	"words": ["Avenir"],
+	"ignorePaths": [".gitignore"]
 }
