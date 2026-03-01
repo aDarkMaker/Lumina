@@ -188,9 +188,6 @@ export function Settings({ onOpenUserAgreement }: SettingsProps) {
 				<div className="section-title">
 					<span>隐私与数据</span>
 				</div>
-				<p className="page-desc settings-desc">
-					扫描结果与权限数据仅保存在本机，不会上传至服务器。
-				</p>
 				<div className="settings-group">
 					<div className="settings-row settings-row-with-switch">
 						<span>匿名使用统计</span>
