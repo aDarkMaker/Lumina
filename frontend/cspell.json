@@ -1,4 +1,15 @@
 {
-	"words": ["Avenir"],
-	"ignorePaths": [".gitignore"]
+	"words": [
+		"autonavi",
+		"Avenir",
+		"aweme",
+		"cloudmusic",
+		"Gphone",
+		"mobileqq",
+		"netease",
+		"taobao"
+	],
+	"ignorePaths": [
+		".gitignore"
+	]
 }
