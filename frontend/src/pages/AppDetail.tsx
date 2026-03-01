@@ -112,29 +112,6 @@ export function AppDetail({ app, onBack }: AppDetailProps) {
 					</div>
 				))}
 			</div>
-
-			<div className="bottom-nav">
-				<button type="button" className="nav-item">
-					<i className="ri-home-4-line nav-icon" aria-hidden />
-					<span className="nav-label">总览</span>
-				</button>
-				<button type="button" className="nav-item">
-					<i className="ri-apps-line nav-icon" aria-hidden />
-					<span className="nav-label">应用</span>
-				</button>
-				<button type="button" className="nav-item active">
-					<i className="ri-shield-keyhole-line nav-icon" aria-hidden />
-					<span className="nav-label">隐私</span>
-				</button>
-				<button type="button" className="nav-item">
-					<i className="ri-notification-3-line nav-icon" aria-hidden />
-					<span className="nav-label">提醒</span>
-				</button>
-				<button type="button" className="nav-item">
-					<i className="ri-settings-4-line nav-icon" aria-hidden />
-					<span className="nav-label">设置</span>
-				</button>
-			</div>
 		</div>
 	)
 }
