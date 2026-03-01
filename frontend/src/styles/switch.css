@@ -41,7 +41,7 @@
 }
 
 .switch input:focus + .slider {
-	box-shadow: 0 0 0 1px var(--accent-color);
+	box-shadow: 0 0 2px var(--accent-color);
 }
 
 .switch input:checked + .slider::before {

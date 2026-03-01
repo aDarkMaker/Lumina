@@ -55,19 +55,19 @@ body::before {
 	transition: filter 0.3s;
 }
 .logo:hover {
-	filter: drop-shadow(0 0 2em #646cffaa);
+	filter: drop-shadow(0 0 4px rgba(100, 108, 255, 0.25));
 }
 .bun-logo {
 	transform: scale(1.2);
 }
 .bun-logo:hover {
-	filter: drop-shadow(0 0 2em #fbf0dfaa);
+	filter: drop-shadow(0 0 4px rgba(251, 240, 223, 0.25));
 }
 .react-logo {
 	animation: spin 20s linear infinite;
 }
 .react-logo:hover {
-	filter: drop-shadow(0 0 2em #61dafbaa);
+	filter: drop-shadow(0 0 4px rgba(97, 218, 251, 0.25));
 }
 @keyframes spin {
 	from {
