@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { getAppList, type AppListItem } from '../ts/AppList'
 
-interface AppListPageProps {
+export interface AppListPageProps {
+	showRiskBadge?: boolean
 	onSelectApp: (app: AppListItem) => void
 }
 
-export function AppListPage({ onSelectApp }: AppListPageProps) {
+export function AppListPage({ showRiskBadge = true, onSelectApp }: AppListPageProps) {
 	const [apps, setApps] = useState<AppListItem[]>([])
 	const [loading, setLoading] = useState(true)
 
@@ -64,7 +65,7 @@ export function AppListPage({ onSelectApp }: AppListPageProps) {
 											</span>
 										)}
 									</div>
-									{app.riskLevel != null && (
+									{showRiskBadge && app.riskLevel != null && (
 										<div
 											className={`risk-badge risk-${app.riskLevel}`}
 											aria-label={`风险: ${app.riskLevel}`}
