@@ -40,6 +40,11 @@
 	gap: 6px;
 }
 
+.header-icon {
+	font-size: 24px;
+	color: var(--text-primary);
+}
+
 .header-dot {
 	width: 4px;
 	height: 4px;
