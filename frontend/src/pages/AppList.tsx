@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { getAppList, type AppListItem } from '../ts/AppList'
+import React, { useEffect, useMemo, useState } from 'react'
+import { getAppList, sortAppList, type AppListItem, type AppListSortOption } from '../ts/AppList'
 
 export interface AppListPageProps {
 	showRiskBadge?: boolean
+	sortBy?: AppListSortOption
 	onSelectApp: (app: AppListItem) => void
 }
 
-export function AppListPage({ showRiskBadge = true, onSelectApp }: AppListPageProps) {
+export function AppListPage({ showRiskBadge = true, sortBy = '按风险等级', onSelectApp }: AppListPageProps) {
 	const [apps, setApps] = useState<AppListItem[]>([])
 	const [loading, setLoading] = useState(true)
 
@@ -15,6 +16,8 @@ export function AppListPage({ showRiskBadge = true, onSelectApp }: AppListPagePr
 			.then(setApps)
 			.finally(() => setLoading(false))
 	}, [])
+
+	const sortedApps = useMemo(() => sortAppList(apps, sortBy), [apps, sortBy])
 
 	return (
 		<div className="mobile-screen">
@@ -31,7 +34,7 @@ export function AppListPage({ showRiskBadge = true, onSelectApp }: AppListPagePr
 
 			<div className="content-scroll">
 				<div className="app-list-summary">
-					<span className="app-list-count">共 {apps.length} 个应用</span>
+					<span className="app-list-count">共 {sortedApps.length} 个应用</span>
 				</div>
 
 				{loading ? (
@@ -41,7 +44,7 @@ export function AppListPage({ showRiskBadge = true, onSelectApp }: AppListPagePr
 					</div>
 				) : (
 					<ul className="app-list">
-						{apps.map((app) => (
+						{sortedApps.map((app) => (
 							<li key={app.id}>
 								<button
 									type="button"

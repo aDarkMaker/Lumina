@@ -1,4 +1,26 @@
-export function Privacy() {
+import { useEffect, useState } from 'react'
+import {
+	getPrivacyTermsList,
+	sortPrivacyTerms,
+	type PrivacyTermsItem,
+	type PrivacyTermsSortOption,
+} from '../ts/PrivacyTerms'
+
+export interface PrivacyProps {
+	privacyTermsSort: PrivacyTermsSortOption
+	onSelectTerm: (term: PrivacyTermsItem) => void
+}
+
+export function Privacy({ privacyTermsSort, onSelectTerm }: PrivacyProps) {
+	const [terms, setTerms] = useState<PrivacyTermsItem[]>([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		getPrivacyTermsList()
+			.then((list) => setTerms(sortPrivacyTerms(list, privacyTermsSort)))
+			.finally(() => setLoading(false))
+	}, [privacyTermsSort])
+
 	return (
 		<div className="mobile-screen">
 			<div className="screen-reflection" />
@@ -13,18 +35,58 @@ export function Privacy() {
 			</div>
 
 			<div className="content-scroll">
-				<div className="section-title">
-					<span>隐私与数据</span>
+				<div className="privacy-content">
+					<div className="privacy-list-summary">
+						<span className="privacy-list-count">共 {terms.length} 条隐私条款</span>
+					</div>
+
+					{loading ? (
+						<div className="privacy-list-loading">
+							<i className="ri-loader-4-line spin" aria-hidden />
+							<span>加载中…</span>
+						</div>
+					) : (
+						<ul className="privacy-list">
+							{terms.map((item) => (
+								<li key={item.id}>
+									<button
+										type="button"
+										className="privacy-term-row"
+										onClick={() => onSelectTerm(item)}
+									>
+										<div className="privacy-term-icon">
+											{item.appIcon ? (
+												<img src={item.appIcon} alt="" />
+											) : (
+												<i className="ri-file-text-line" aria-hidden />
+											)}
+										</div>
+										<div className="privacy-term-info">
+											<span className="privacy-term-name">{item.appName}</span>
+											<span className="privacy-term-summary">{item.summary}</span>
+										</div>
+										{item.riskLevel != null && (
+											<div
+												className={`risk-badge risk-${item.riskLevel}`}
+												aria-label={`风险: ${item.riskLevel}`}
+											>
+												{item.riskLevel === 'high'
+													? '高危'
+													: item.riskLevel === 'medium'
+														? '中危'
+														: '常规'}
+											</div>
+										)}
+										<i
+											className="ri-arrow-right-s-line privacy-term-chevron"
+											aria-hidden
+										/>
+									</button>
+								</li>
+							))}
+						</ul>
+					)}
 				</div>
-				<p className="page-desc">
-					本应用在设备本地分析权限与隐私条款，不上传您的敏感数据。规则与版本由服务端下发，移动端仅拉取规则配置。
-				</p>
-				<div className="section-title">
-					<span>隐私政策</span>
-				</div>
-				<p className="page-desc">
-					请在使用前阅读并同意我们的隐私政策与用户协议。我们重视您的隐私，不会将个人可识别信息用于商业目的。
-				</p>
 			</div>
 		</div>
 	)

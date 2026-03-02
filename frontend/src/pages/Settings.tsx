@@ -3,11 +3,13 @@ import { Switch } from '../components/Switch'
 
 const SCAN_FREQUENCY_OPTIONS = ['每日', '每周', '仅 Wi‑Fi 时', '手动'] as const
 const SORT_OPTIONS = ['按风险等级', '按名称', '按安装时间', '按大小'] as const
+const PRIVACY_TERMS_SORT_OPTIONS = ['按应用名称', '按风险等级', '按更新时间'] as const
 
 type ScanFrequency = (typeof SCAN_FREQUENCY_OPTIONS)[number]
 type SortBy = (typeof SORT_OPTIONS)[number]
+type PrivacyTermsSort = (typeof PRIVACY_TERMS_SORT_OPTIONS)[number]
 
-type PickerType = 'scanFrequency' | 'sortBy' | null
+type PickerType = 'scanFrequency' | 'sortBy' | 'privacyTermsSort' | null
 
 const DEFAULT_SETTINGS = {
 	scanFrequency: '每日' as ScanFrequency,
@@ -16,6 +18,7 @@ const DEFAULT_SETTINGS = {
 	newAppAlert: true,
 	ruleAutoUpdate: true,
 	sortBy: '按风险等级' as SortBy,
+	privacyTermsSort: '按应用名称' as PrivacyTermsSort,
 	showRiskBadge: true,
 	anonymousStats: false,
 }
@@ -23,12 +26,20 @@ const DEFAULT_SETTINGS = {
 interface SettingsProps {
 	showRiskBadge?: boolean
 	onShowRiskBadgeChange?: (value: boolean) => void
+	sortBy?: SortBy
+	onSortByChange?: (value: SortBy) => void
+	privacyTermsSort?: PrivacyTermsSort
+	onPrivacyTermsSortChange?: (value: PrivacyTermsSort) => void
 	onOpenUserAgreement?: () => void
 }
 
 export function Settings({
 	showRiskBadge: showRiskBadgeProp,
 	onShowRiskBadgeChange,
+	sortBy: sortByProp,
+	onSortByChange,
+	privacyTermsSort: privacyTermsSortProp,
+	onPrivacyTermsSortChange,
 	onOpenUserAgreement,
 }: SettingsProps) {
 	const [scanFrequency, setScanFrequency] = useState<ScanFrequency>(
@@ -38,7 +49,17 @@ export function Settings({
 	const [mediumRiskAlert, setMediumRiskAlert] = useState(DEFAULT_SETTINGS.mediumRiskAlert)
 	const [newAppAlert, setNewAppAlert] = useState(DEFAULT_SETTINGS.newAppAlert)
 	const [ruleAutoUpdate, setRuleAutoUpdate] = useState(DEFAULT_SETTINGS.ruleAutoUpdate)
-	const [sortBy, setSortBy] = useState<SortBy>(DEFAULT_SETTINGS.sortBy)
+	const [sortByLocal, setSortByLocal] = useState<SortBy>(DEFAULT_SETTINGS.sortBy)
+	const sortBy = onSortByChange && sortByProp !== undefined ? sortByProp : sortByLocal
+	const setSortBy = onSortByChange ?? setSortByLocal
+	const [privacyTermsSortLocal, setPrivacyTermsSortLocal] = useState<PrivacyTermsSort>(
+		DEFAULT_SETTINGS.privacyTermsSort,
+	)
+	const privacyTermsSort =
+		onPrivacyTermsSortChange && privacyTermsSortProp !== undefined
+			? privacyTermsSortProp
+			: privacyTermsSortLocal
+	const setPrivacyTermsSort = onPrivacyTermsSortChange ?? setPrivacyTermsSortLocal
 	const [showRiskBadgeLocal, setShowRiskBadgeLocal] = useState(DEFAULT_SETTINGS.showRiskBadge)
 	const showRiskBadge =
 		onShowRiskBadgeChange && showRiskBadgeProp !== undefined
@@ -56,6 +77,7 @@ export function Settings({
 	const [dropdownOpenAnimated, setDropdownOpenAnimated] = useState(false)
 	const scanFreqRef = useRef<HTMLButtonElement>(null)
 	const sortByRef = useRef<HTMLButtonElement>(null)
+	const privacyTermsSortRef = useRef<HTMLButtonElement>(null)
 
 	useEffect(() => {
 		if (!openPicker) {
@@ -64,7 +86,12 @@ export function Settings({
 			return
 		}
 		setClosing(false)
-		const el = openPicker === 'scanFrequency' ? scanFreqRef.current : sortByRef.current
+		const el =
+			openPicker === 'scanFrequency'
+				? scanFreqRef.current
+				: openPicker === 'sortBy'
+					? sortByRef.current
+					: privacyTermsSortRef.current
 		if (!el) return
 		const rect = el.getBoundingClientRect()
 		setDropdownRect({
@@ -103,6 +130,7 @@ export function Settings({
 		setNewAppAlert(DEFAULT_SETTINGS.newAppAlert)
 		setRuleAutoUpdate(DEFAULT_SETTINGS.ruleAutoUpdate)
 		setSortBy(DEFAULT_SETTINGS.sortBy)
+		setPrivacyTermsSort(DEFAULT_SETTINGS.privacyTermsSort)
 		setShowRiskBadge(DEFAULT_SETTINGS.showRiskBadge)
 		setAnonymousStats(DEFAULT_SETTINGS.anonymousStats)
 	}
@@ -206,6 +234,31 @@ export function Settings({
 								/>
 							</span>
 						</button>
+						<button
+							ref={privacyTermsSortRef}
+							type="button"
+							className="settings-row settings-row-tappable"
+							aria-expanded={
+								openPicker === 'privacyTermsSort' &&
+								dropdownOpenAnimated &&
+								!isClosing
+							}
+							aria-haspopup="listbox"
+							onClick={() =>
+								setOpenPicker(
+									openPicker === 'privacyTermsSort' ? null : 'privacyTermsSort',
+								)
+							}
+						>
+							<span>隐私条款排序</span>
+							<span className="settings-row-right">
+								<span className="settings-value">{privacyTermsSort}</span>
+								<i
+									className="ri-arrow-right-s-line settings-chevron settings-chevron-dropdown"
+									aria-hidden
+								/>
+							</span>
+						</button>
 						<div className="settings-row settings-row-with-switch">
 							<span>显示风险标签</span>
 							<Switch
@@ -265,7 +318,11 @@ export function Settings({
 						className={`settings-dropdown ${dropdownOpenAnimated && !isClosing ? 'settings-dropdown-open' : ''} ${isClosing ? 'settings-dropdown-closing' : ''}`}
 						role="listbox"
 						aria-label={
-							openPicker === 'scanFrequency' ? '选择扫描频率' : '选择应用列表排序'
+							openPicker === 'scanFrequency'
+								? '选择扫描频率'
+								: openPicker === 'sortBy'
+									? '选择应用列表排序'
+									: '选择隐私条款排序'
 						}
 						style={{
 							top: dropdownRect.top,
@@ -306,6 +363,26 @@ export function Settings({
 										>
 											{opt}
 											{sortBy === opt && (
+												<i
+													className="ri-check-line settings-picker-check"
+													aria-hidden
+												/>
+											)}
+										</button>
+									</li>
+								))}
+							{openPicker === 'privacyTermsSort' &&
+								PRIVACY_TERMS_SORT_OPTIONS.map((opt) => (
+									<li key={opt}>
+										<button
+											type="button"
+											role="option"
+											aria-selected={privacyTermsSort === opt}
+											className={`settings-dropdown-option ${privacyTermsSort === opt ? 'selected' : ''}`}
+											onClick={() => setPrivacyTermsSort(opt)}
+										>
+											{opt}
+											{privacyTermsSort === opt && (
 												<i
 													className="ri-check-line settings-picker-check"
 													aria-hidden
