@@ -1,7 +1,7 @@
 export type NavView = 'home' | 'apps' | 'privacy' | 'reminders' | 'settings'
 
 const NAV_ITEMS: { id: NavView; icon: string; label: string }[] = [
-	{ id: 'home', icon: 'ri-home-4-line', label: '总览' },
+	{ id: 'home', icon: 'ri-home-4-line', label: '主页' },
 	{ id: 'apps', icon: 'ri-apps-line', label: '应用' },
 	{ id: 'privacy', icon: 'ri-shield-keyhole-line', label: '隐私' },
 	{ id: 'reminders', icon: 'ri-notification-3-line', label: '提醒' },
