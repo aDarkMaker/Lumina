@@ -21,17 +21,25 @@ const DEFAULT_SETTINGS = {
 }
 
 interface SettingsProps {
+	showRiskBadge?: boolean
+	onShowRiskBadgeChange?: (value: boolean) => void
 	onOpenUserAgreement?: () => void
 }
 
-export function Settings({ onOpenUserAgreement }: SettingsProps) {
+export function Settings({
+	showRiskBadge: showRiskBadgeProp,
+	onShowRiskBadgeChange,
+	onOpenUserAgreement,
+}: SettingsProps) {
 	const [scanFrequency, setScanFrequency] = useState<ScanFrequency>(DEFAULT_SETTINGS.scanFrequency)
 	const [highRiskAlert, setHighRiskAlert] = useState(DEFAULT_SETTINGS.highRiskAlert)
 	const [mediumRiskAlert, setMediumRiskAlert] = useState(DEFAULT_SETTINGS.mediumRiskAlert)
 	const [newAppAlert, setNewAppAlert] = useState(DEFAULT_SETTINGS.newAppAlert)
 	const [ruleAutoUpdate, setRuleAutoUpdate] = useState(DEFAULT_SETTINGS.ruleAutoUpdate)
 	const [sortBy, setSortBy] = useState<SortBy>(DEFAULT_SETTINGS.sortBy)
-	const [showRiskBadge, setShowRiskBadge] = useState(DEFAULT_SETTINGS.showRiskBadge)
+	const [showRiskBadgeLocal, setShowRiskBadgeLocal] = useState(DEFAULT_SETTINGS.showRiskBadge)
+	const showRiskBadge = onShowRiskBadgeChange && showRiskBadgeProp !== undefined ? showRiskBadgeProp : showRiskBadgeLocal
+	const setShowRiskBadge = onShowRiskBadgeChange ?? setShowRiskBadgeLocal
 	const [anonymousStats, setAnonymousStats] = useState(DEFAULT_SETTINGS.anonymousStats)
 	const [openPicker, setOpenPicker] = useState<PickerType>(null)
 	const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number; width: number } | null>(null)
