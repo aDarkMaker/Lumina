@@ -11,6 +11,16 @@ import { Settings } from './Settings'
 import { UserAgreement } from './UserAgreement'
 
 const ENTER_DELAY_MS = 32
+const STORAGE_KEY_SHOW_RISK_BADGE = 'lumina_showRiskBadge'
+
+function readShowRiskBadge(): boolean {
+	try {
+		const v = localStorage.getItem(STORAGE_KEY_SHOW_RISK_BADGE)
+		return v !== null ? v === 'true' : true
+	} catch {
+		return true
+	}
+}
 
 export type SettingsOverlayType = 'userAgreement' | null
 
@@ -20,6 +30,16 @@ export function App() {
 	const [closingApp, setClosingApp] = useState<AppListItem | null>(null)
 	const [detailVisible, setDetailVisible] = useState(false)
 	const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+	const [showRiskBadge, setShowRiskBadgeState] = useState(readShowRiskBadge)
+	const setShowRiskBadge = (value: boolean) => {
+		setShowRiskBadgeState(value)
+		try {
+			localStorage.setItem(STORAGE_KEY_SHOW_RISK_BADGE, String(value))
+		} catch {
+			// ignore
+		}
+	}
 
 	const [settingsOverlay, setSettingsOverlay] = useState<SettingsOverlayType>(null)
 	const [closingSettingsOverlay, setClosingSettingsOverlay] = useState(false)
@@ -101,7 +121,11 @@ export function App() {
 					<>
 						<div className="app-views">
 							<div className="app-view app-list-view">
-								<Settings onOpenUserAgreement={() => setSettingsOverlay('userAgreement')} />
+								<Settings
+									showRiskBadge={showRiskBadge}
+									onShowRiskBadgeChange={setShowRiskBadge}
+									onOpenUserAgreement={() => setSettingsOverlay('userAgreement')}
+								/>
 							</div>
 							{showSettingsOverlay && (
 								<div
@@ -118,7 +142,10 @@ export function App() {
 					<>
 						<div className="app-views">
 							<div className="app-view app-list-view">
-								<AppListPage onSelectApp={setSelectedApp} />
+								<AppListPage
+									showRiskBadge={showRiskBadge}
+									onSelectApp={setSelectedApp}
+								/>
 							</div>
 							{showDetail && (
 								<div
