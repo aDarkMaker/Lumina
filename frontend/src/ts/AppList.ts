@@ -24,6 +24,8 @@ export interface AppListItem {
 	version?: string
 	/** 体积等描述，如 "285 MB" */
 	size?: string
+	/** 安装时间戳，用于“按安装时间”排序；无则排到末尾 */
+	installTime?: number
 	/** 该应用申请的权限列表；无则使用默认列表 */
 	permissions?: AppPermissionItem[]
 }
@@ -56,6 +58,46 @@ export const DEFAULT_APP_PERMISSIONS: AppPermissionItem[] = [
 /** 获取应用列表。Web 为 mock；移动端可替换为 Native 模块调用。 */
 export function getAppList(): Promise<AppListItem[]> {
 	return Promise.resolve(MOCK_APP_LIST)
+}
+
+export type AppListSortOption = '按风险等级' | '按名称' | '按安装时间' | '按大小'
+
+const RISK_ORDER: Record<AppRiskLevel | 'unknown', number> = {
+	high: 0,
+	medium: 1,
+	normal: 2,
+	unknown: 3,
+}
+
+/** 将 "285 MB" 等解析为数字（MB）便于排序，解析失败返回 0 */
+function parseSizeMb(sizeStr: string | undefined): number {
+	if (!sizeStr) return 0
+	const m = sizeStr.trim().match(/^([\d.]+)\s*MB$/i)
+	return m ? Number(m[1]) || 0 : 0
+}
+
+export function sortAppList(
+	items: AppListItem[],
+	option: AppListSortOption,
+): AppListItem[] {
+	const list = [...items]
+	switch (option) {
+		case '按风险等级':
+			return list.sort(
+				(a, b) =>
+					RISK_ORDER[a.riskLevel ?? 'unknown'] - RISK_ORDER[b.riskLevel ?? 'unknown'],
+			)
+		case '按名称':
+			return list.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+		case '按安装时间':
+			return list.sort((a, b) => (b.installTime ?? 0) - (a.installTime ?? 0))
+		case '按大小':
+			return list.sort(
+				(a, b) => parseSizeMb(b.size) - parseSizeMb(a.size),
+			)
+		default:
+			return list
+	}
 }
 
 /** 前端 mock：模拟手机内应用列表 */
