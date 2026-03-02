@@ -31,18 +31,27 @@ export function Settings({
 	onShowRiskBadgeChange,
 	onOpenUserAgreement,
 }: SettingsProps) {
-	const [scanFrequency, setScanFrequency] = useState<ScanFrequency>(DEFAULT_SETTINGS.scanFrequency)
+	const [scanFrequency, setScanFrequency] = useState<ScanFrequency>(
+		DEFAULT_SETTINGS.scanFrequency,
+	)
 	const [highRiskAlert, setHighRiskAlert] = useState(DEFAULT_SETTINGS.highRiskAlert)
 	const [mediumRiskAlert, setMediumRiskAlert] = useState(DEFAULT_SETTINGS.mediumRiskAlert)
 	const [newAppAlert, setNewAppAlert] = useState(DEFAULT_SETTINGS.newAppAlert)
 	const [ruleAutoUpdate, setRuleAutoUpdate] = useState(DEFAULT_SETTINGS.ruleAutoUpdate)
 	const [sortBy, setSortBy] = useState<SortBy>(DEFAULT_SETTINGS.sortBy)
 	const [showRiskBadgeLocal, setShowRiskBadgeLocal] = useState(DEFAULT_SETTINGS.showRiskBadge)
-	const showRiskBadge = onShowRiskBadgeChange && showRiskBadgeProp !== undefined ? showRiskBadgeProp : showRiskBadgeLocal
+	const showRiskBadge =
+		onShowRiskBadgeChange && showRiskBadgeProp !== undefined
+			? showRiskBadgeProp
+			: showRiskBadgeLocal
 	const setShowRiskBadge = onShowRiskBadgeChange ?? setShowRiskBadgeLocal
 	const [anonymousStats, setAnonymousStats] = useState(DEFAULT_SETTINGS.anonymousStats)
 	const [openPicker, setOpenPicker] = useState<PickerType>(null)
-	const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number; width: number } | null>(null)
+	const [dropdownRect, setDropdownRect] = useState<{
+		top: number
+		left: number
+		width: number
+	} | null>(null)
 	const [isClosing, setClosing] = useState(false)
 	const [dropdownOpenAnimated, setDropdownOpenAnimated] = useState(false)
 	const scanFreqRef = useRef<HTMLButtonElement>(null)
@@ -113,121 +122,135 @@ export function Settings({
 
 			<div className="content-scroll">
 				<div className="settings-content">
-				<div className="section-title">
-					<span>通用</span>
-				</div>
-				<div className="settings-group">
-					<button
-						ref={scanFreqRef}
-						type="button"
-						className="settings-row settings-row-tappable"
-						aria-expanded={openPicker === 'scanFrequency' && dropdownOpenAnimated && !isClosing}
-						aria-haspopup="listbox"
-						onClick={() => setOpenPicker(openPicker === 'scanFrequency' ? null : 'scanFrequency')}
-					>
-						<span>扫描频率</span>
-						<span className="settings-row-right">
-							<span className="settings-value">{scanFrequency}</span>
-							<i className="ri-arrow-right-s-line settings-chevron settings-chevron-dropdown" aria-hidden />
-						</span>
-					</button>
-					<div className="settings-row settings-row-with-switch">
-						<span>高危应用提醒</span>
-						<Switch
-							checked={highRiskAlert}
-							onChange={setHighRiskAlert}
-							aria-label="高危应用提醒"
-						/>
+					<div className="section-title">
+						<span>通用</span>
 					</div>
-					<div className="settings-row settings-row-with-switch">
-						<span>中危应用提醒</span>
-						<Switch
-							checked={mediumRiskAlert}
-							onChange={setMediumRiskAlert}
-							aria-label="中危应用提醒"
-						/>
+					<div className="settings-group">
+						<button
+							ref={scanFreqRef}
+							type="button"
+							className="settings-row settings-row-tappable"
+							aria-expanded={
+								openPicker === 'scanFrequency' && dropdownOpenAnimated && !isClosing
+							}
+							aria-haspopup="listbox"
+							onClick={() =>
+								setOpenPicker(
+									openPicker === 'scanFrequency' ? null : 'scanFrequency',
+								)
+							}
+						>
+							<span>扫描频率</span>
+							<span className="settings-row-right">
+								<span className="settings-value">{scanFrequency}</span>
+								<i
+									className="ri-arrow-right-s-line settings-chevron settings-chevron-dropdown"
+									aria-hidden
+								/>
+							</span>
+						</button>
+						<div className="settings-row settings-row-with-switch">
+							<span>高危应用提醒</span>
+							<Switch
+								checked={highRiskAlert}
+								onChange={setHighRiskAlert}
+								aria-label="高危应用提醒"
+							/>
+						</div>
+						<div className="settings-row settings-row-with-switch">
+							<span>中危应用提醒</span>
+							<Switch
+								checked={mediumRiskAlert}
+								onChange={setMediumRiskAlert}
+								aria-label="中危应用提醒"
+							/>
+						</div>
+						<div className="settings-row settings-row-with-switch">
+							<span>新应用安装提醒</span>
+							<Switch
+								checked={newAppAlert}
+								onChange={setNewAppAlert}
+								aria-label="新应用安装提醒"
+							/>
+						</div>
+						<div className="settings-row settings-row-with-switch">
+							<span>规则自动更新</span>
+							<Switch
+								checked={ruleAutoUpdate}
+								onChange={setRuleAutoUpdate}
+								aria-label="规则自动更新"
+							/>
+						</div>
 					</div>
-					<div className="settings-row settings-row-with-switch">
-						<span>新应用安装提醒</span>
-						<Switch
-							checked={newAppAlert}
-							onChange={setNewAppAlert}
-							aria-label="新应用安装提醒"
-						/>
-					</div>
-					<div className="settings-row settings-row-with-switch">
-						<span>规则自动更新</span>
-						<Switch
-							checked={ruleAutoUpdate}
-							onChange={setRuleAutoUpdate}
-							aria-label="规则自动更新"
-						/>
-					</div>
-				</div>
 
-				<div className="section-title">
-					<span>展示与排序</span>
-				</div>
-				<div className="settings-group">
-					<button
-						ref={sortByRef}
-						type="button"
-						className="settings-row settings-row-tappable"
-						aria-expanded={openPicker === 'sortBy' && dropdownOpenAnimated && !isClosing}
-						aria-haspopup="listbox"
-						onClick={() => setOpenPicker(openPicker === 'sortBy' ? null : 'sortBy')}
-					>
-						<span>应用列表排序</span>
-						<span className="settings-row-right">
-							<span className="settings-value">{sortBy}</span>
-							<i className="ri-arrow-right-s-line settings-chevron settings-chevron-dropdown" aria-hidden />
-						</span>
-					</button>
-					<div className="settings-row settings-row-with-switch">
-						<span>显示风险标签</span>
-						<Switch
-							checked={showRiskBadge}
-							onChange={setShowRiskBadge}
-							aria-label="显示风险标签"
-						/>
+					<div className="section-title">
+						<span>展示与排序</span>
 					</div>
-				</div>
+					<div className="settings-group">
+						<button
+							ref={sortByRef}
+							type="button"
+							className="settings-row settings-row-tappable"
+							aria-expanded={
+								openPicker === 'sortBy' && dropdownOpenAnimated && !isClosing
+							}
+							aria-haspopup="listbox"
+							onClick={() => setOpenPicker(openPicker === 'sortBy' ? null : 'sortBy')}
+						>
+							<span>应用列表排序</span>
+							<span className="settings-row-right">
+								<span className="settings-value">{sortBy}</span>
+								<i
+									className="ri-arrow-right-s-line settings-chevron settings-chevron-dropdown"
+									aria-hidden
+								/>
+							</span>
+						</button>
+						<div className="settings-row settings-row-with-switch">
+							<span>显示风险标签</span>
+							<Switch
+								checked={showRiskBadge}
+								onChange={setShowRiskBadge}
+								aria-label="显示风险标签"
+							/>
+						</div>
+					</div>
 
-				<div className="section-title">
-					<span>隐私与数据</span>
-				</div>
-				<div className="settings-group">
-					<div className="settings-row settings-row-with-switch">
-						<span>匿名使用统计</span>
-						<Switch
-							checked={anonymousStats}
-							onChange={setAnonymousStats}
-							aria-label="匿名使用统计"
-						/>
+					<div className="section-title">
+						<span>隐私与数据</span>
 					</div>
-				</div>
+					<div className="settings-group">
+						<div className="settings-row settings-row-with-switch">
+							<span>匿名使用统计</span>
+							<Switch
+								checked={anonymousStats}
+								onChange={setAnonymousStats}
+								aria-label="匿名使用统计"
+							/>
+						</div>
+					</div>
 
-				<div className="section-title">
-					<span>关于</span>
-				</div>
-				<div className="settings-group">
-					<div className="settings-row">
-						<span>应用版本</span>
-						<span className="settings-value">1.0.0</span>
+					<div className="section-title">
+						<span>关于</span>
 					</div>
-					<div className="settings-row">
-						<span>规则版本</span>
-						<span className="settings-value">—</span>
+					<div className="settings-group">
+						<div className="settings-row">
+							<span>应用版本</span>
+							<span className="settings-value">1.0.0</span>
+						</div>
+						<div className="settings-row">
+							<span>规则版本</span>
+							<span className="settings-value">—</span>
+						</div>
+						<button
+							type="button"
+							className="settings-row settings-link"
+							onClick={() => onOpenUserAgreement?.()}
+						>
+							<span>用户协议</span>
+							<i className="ri-arrow-right-s-line settings-chevron" aria-hidden />
+						</button>
 					</div>
-					<button
-						type="button"
-						className="settings-row settings-link"
-						onClick={() => onOpenUserAgreement?.()}
-					>
-						<span>用户协议</span>
-						<i className="ri-arrow-right-s-line settings-chevron" aria-hidden />
-					</button>
-				</div>
 				</div>
 			</div>
 
@@ -241,7 +264,9 @@ export function Settings({
 					<div
 						className={`settings-dropdown ${dropdownOpenAnimated && !isClosing ? 'settings-dropdown-open' : ''} ${isClosing ? 'settings-dropdown-closing' : ''}`}
 						role="listbox"
-						aria-label={openPicker === 'scanFrequency' ? '选择扫描频率' : '选择应用列表排序'}
+						aria-label={
+							openPicker === 'scanFrequency' ? '选择扫描频率' : '选择应用列表排序'
+						}
 						style={{
 							top: dropdownRect.top,
 							left: dropdownRect.left,
@@ -261,7 +286,10 @@ export function Settings({
 										>
 											{opt}
 											{scanFrequency === opt && (
-												<i className="ri-check-line settings-picker-check" aria-hidden />
+												<i
+													className="ri-check-line settings-picker-check"
+													aria-hidden
+												/>
 											)}
 										</button>
 									</li>
@@ -278,7 +306,10 @@ export function Settings({
 										>
 											{opt}
 											{sortBy === opt && (
-												<i className="ri-check-line settings-picker-check" aria-hidden />
+												<i
+													className="ri-check-line settings-picker-check"
+													aria-hidden
+												/>
 											)}
 										</button>
 									</li>
