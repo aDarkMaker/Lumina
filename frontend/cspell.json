@@ -9,7 +9,5 @@
 		"netease",
 		"taobao"
 	],
-	"ignorePaths": [
-		".gitignore"
-	]
+	"ignorePaths": [".gitignore"]
 }
