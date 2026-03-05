@@ -23,7 +23,8 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@lumina/mobile": ["../mobile/src/index.ts"]
 		},
 
 		// Some stricter flags (disabled by default)
