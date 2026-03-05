@@ -58,9 +58,7 @@ export function sortPrivacyTerms(
 					RISK_ORDER[a.riskLevel ?? 'unknown'] - RISK_ORDER[b.riskLevel ?? 'unknown'],
 			)
 		case '按更新时间':
-			return list.sort(
-				(a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0),
-			)
+			return list.sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0))
 		default:
 			return list
 	}

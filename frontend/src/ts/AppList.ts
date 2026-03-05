@@ -55,8 +55,37 @@ export const DEFAULT_APP_PERMISSIONS: AppPermissionItem[] = [
 	},
 ]
 
-/** 获取应用列表。Web 为 mock；移动端可替换为 Native 模块调用。 */
-export function getAppList(): Promise<AppListItem[]> {
+/** 从原生插件返回的数据转为 AppListItem（风险等级等由前端规则后续计算） */
+function nativeToAppListItem(n: {
+	id: string
+	packageName: string
+	name: string
+	version?: string
+	installTime?: number
+	icon?: string
+}): AppListItem {
+	return {
+		id: n.id,
+		name: n.name,
+		packageName: n.packageName,
+		version: n.version,
+		installTime: n.installTime,
+		icon: n.icon,
+	}
+}
+
+/** 获取应用列表。Web 为 mock；移动端通过 @lumina/mobile 插件扫描本机已安装应用。 */
+export async function getAppList(): Promise<AppListItem[]> {
+	try {
+		const { Capacitor } = await import('@capacitor/core')
+		if (Capacitor.isNativePlatform()) {
+			const { AppScanner } = await import('@lumina/mobile')
+			const { apps } = await AppScanner.getInstalledApps()
+			return apps.map(nativeToAppListItem)
+		}
+	} catch (e) {
+		console.warn('[Lumina] AppScanner unavailable, using mock list', e)
+	}
 	return Promise.resolve(MOCK_APP_LIST)
 }
 
@@ -76,10 +105,7 @@ function parseSizeMb(sizeStr: string | undefined): number {
 	return m ? Number(m[1]) || 0 : 0
 }
 
-export function sortAppList(
-	items: AppListItem[],
-	option: AppListSortOption,
-): AppListItem[] {
+export function sortAppList(items: AppListItem[], option: AppListSortOption): AppListItem[] {
 	const list = [...items]
 	switch (option) {
 		case '按风险等级':
@@ -92,9 +118,7 @@ export function sortAppList(
 		case '按安装时间':
 			return list.sort((a, b) => (b.installTime ?? 0) - (a.installTime ?? 0))
 		case '按大小':
-			return list.sort(
-				(a, b) => parseSizeMb(b.size) - parseSizeMb(a.size),
-			)
+			return list.sort((a, b) => parseSizeMb(b.size) - parseSizeMb(a.size))
 		default:
 			return list
 	}
