@@ -62,8 +62,12 @@ export function Privacy({ privacyTermsSort, onSelectTerm }: PrivacyProps) {
 											)}
 										</div>
 										<div className="privacy-term-info">
-											<span className="privacy-term-name">{item.appName}</span>
-											<span className="privacy-term-summary">{item.summary}</span>
+											<span className="privacy-term-name">
+												{item.appName}
+											</span>
+											<span className="privacy-term-summary">
+												{item.summary}
+											</span>
 										</div>
 										{item.riskLevel != null && (
 											<div

@@ -7,7 +7,11 @@ export interface AppListPageProps {
 	onSelectApp: (app: AppListItem) => void
 }
 
-export function AppListPage({ showRiskBadge = true, sortBy = '按风险等级', onSelectApp }: AppListPageProps) {
+export function AppListPage({
+	showRiskBadge = true,
+	sortBy = '按风险等级',
+	onSelectApp,
+}: AppListPageProps) {
 	const [apps, setApps] = useState<AppListItem[]>([])
 	const [loading, setLoading] = useState(true)
 

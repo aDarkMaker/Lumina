@@ -78,9 +78,7 @@ export function Reminders() {
 
 			<div className="content-scroll">
 				<div className="reminders-content">
-					<div
-						className={`reminders-summary ${totalCount > 0 ? 'has-alerts' : ''}`}
-					>
+					<div className={`reminders-summary ${totalCount > 0 ? 'has-alerts' : ''}`}>
 						<span className="reminders-summary-text">待处理提醒</span>
 						<span className="reminders-summary-count">{totalCount}</span>
 					</div>
@@ -130,7 +128,10 @@ export function Reminders() {
 							<div className="reminders-section-icon terms">
 								<i className="ri-file-text-line" aria-hidden />
 							</div>
-							<h2 id="reminders-unreasonable-terms" className="reminders-section-title">
+							<h2
+								id="reminders-unreasonable-terms"
+								className="reminders-section-title"
+							>
 								不合理的隐私/安全条款
 							</h2>
 						</div>

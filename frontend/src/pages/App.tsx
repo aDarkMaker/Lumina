@@ -43,13 +43,7 @@ function readPrivacyTermsSort(): PrivacyTermsSort {
 function readAppListSort(): AppListSortOption {
 	try {
 		const v = localStorage.getItem(STORAGE_KEY_APP_LIST_SORT) as AppListSortOption | null
-		if (
-			v === '按风险等级' ||
-			v === '按名称' ||
-			v === '按安装时间' ||
-			v === '按大小'
-		)
-			return v
+		if (v === '按风险等级' || v === '按名称' || v === '按安装时间' || v === '按大小') return v
 		return DEFAULT_APP_LIST_SORT
 	} catch {
 		return DEFAULT_APP_LIST_SORT
