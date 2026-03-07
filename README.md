@@ -1,16 +1,22 @@
 <div align="center">
-  <img src="frontend/src/assets/icons/icon.png" width="80" alt="烛照" />
+
+  <img src="frontend/src/assets/icons/icon.png" width="88" alt="烛照" style="border-radius: 20px; display: block; margin: 0 auto 0.75rem;" />
+
   # 烛照 / Lumina
+
+  <sub>移动端应用权限与隐私政策风险分析，本地分析、风险一目了然。</sub>
+
+  <br /><br />
 
   ![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge&logo=android)
   ![iOS](https://img.shields.io/badge/iOS-计划中-lightgrey?style=for-the-badge&logo=apple)
   ![React](https://img.shields.io/badge/React-18+-blue?style=for-the-badge&logo=react)
   ![Go](https://img.shields.io/badge/Go-后端-00ADD8?style=for-the-badge&logo=go)
 
-  **移动端应用权限与隐私政策风险分析工具**
-  <br />
+  <br /><br />
 
-  [English](README_en.md) • **中文说明**
+  [English](README_en.md) · **中文说明**
+
 </div>
 
 ---

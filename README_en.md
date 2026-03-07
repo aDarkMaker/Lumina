@@ -1,18 +1,22 @@
 <div align="center">
-  <img src="frontend/src/assets/icons/icon.png" width="80" alt="烛照" />
+
+  <img src="frontend/src/assets/icons/icon.png" width="88" alt="Lumina" style="border-radius: 20px; display: block; margin: 0 auto 0.75rem;" />
+
   # Lumina / 烛照
+
+  <sub>App permissions & privacy policies — analyzed locally, risk at a glance.</sub>
+
+  <br /><br />
 
   ![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge&logo=android)
   ![iOS](https://img.shields.io/badge/iOS-Planned-lightgrey?style=for-the-badge&logo=apple)
   ![React](https://img.shields.io/badge/React-18+-blue?style=for-the-badge&logo=react)
   ![Go](https://img.shields.io/badge/Go-Backend-00ADD8?style=for-the-badge&logo=go)
 
-  **App permissions & privacy policies — analyzed locally, risk levels at a glance**
-  <br />
-    *Permission & Privacy at a glance — analyzed locally.*
+  <br /><br />
 
+  **English** · [中文说明](README.md)
 
-  **English** • [中文说明](README.md)
 </div>
 
 ---
