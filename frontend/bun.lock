@@ -5,6 +5,7 @@
       "name": "LawApp(Template)",
       "dependencies": {
         "@capacitor/android": "^7.4.4",
+        "@capacitor/app": "latest",
         "@capacitor/core": "^7.4.4",
         "@lumina/mobile": "file:../mobile",
         "react": "^19",
@@ -21,6 +22,8 @@
   },
   "packages": {
     "@capacitor/android": ["@capacitor/android@7.5.0", "", { "peerDependencies": { "@capacitor/core": "^7.5.0" } }, "sha512-VjESuJYzQQH4vxvrOQV0yXuDv3Gx1bfb6YpAkoGfUHe0kiw0LY5nh5Kn7I5bI9hlht9SJ8YmSsCgFeMNyzKoWQ=="],
+
+    "@capacitor/app": ["@capacitor/app@8.0.1", "", { "peerDependencies": { "@capacitor/core": ">=8.0.0" } }, "sha512-yeG3yyA0ETKqvgqexwHMBlmVOF13A1hRXzv/km0Ptv5TrNIZvZJK4MTI3uiqvnbHrzoJGP5DwWAjEXEfi90v3Q=="],
 
     "@capacitor/cli": ["@capacitor/cli@7.5.0", "", { "dependencies": { "@ionic/cli-framework-output": "^2.2.8", "@ionic/utils-subprocess": "^3.0.1", "@ionic/utils-terminal": "^2.3.5", "commander": "^12.1.0", "debug": "^4.4.0", "env-paths": "^2.2.0", "fs-extra": "^11.2.0", "kleur": "^4.1.5", "native-run": "^2.0.3", "open": "^8.4.0", "plist": "^3.1.0", "prompts": "^2.4.2", "rimraf": "^6.0.1", "semver": "^7.6.3", "tar": "^7.5.3", "tslib": "^2.8.1", "xml2js": "^0.6.2" }, "bin": { "cap": "bin/capacitor", "capacitor": "bin/capacitor" } }, "sha512-mlohsvLZjWrO5eAVTn1+dABNQwQawcphVp6NQVJZ3I4x2BAoNmJj53QflX7PYGUipL9gF9EM9Yiku3m1McxFZg=="],
 
