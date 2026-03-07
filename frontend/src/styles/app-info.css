@@ -9,26 +9,32 @@
 .app-icon-wrapper {
 	width: 80px;
 	height: 80px;
-	background: linear-gradient(135deg, #07c160 0%, #05a350 100%);
+	background: transparent;
 	border-radius: 20px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 16px;
-	box-shadow: 0 2px 4px rgba(7, 193, 96, 0.12);
+	overflow: hidden;
+}
+
+.app-icon-wrapper--placeholder {
+	background: rgba(255, 255, 255, 0.06);
 }
 
 .app-icon-letter,
 .app-icon-ri {
 	font-size: 40px;
-	color: #fff;
+	color: var(--text-secondary);
 	font-weight: 400;
 }
 .app-icon-img {
-	width: 48px;
-	height: 48px;
+	width: 100%;
+	height: 100%;
 	object-fit: contain;
+	object-position: center;
 	border-radius: 12px;
+	display: block;
 }
 
 .app-name {
@@ -72,4 +78,9 @@
 	background-color: transparent;
 	border: 1px solid var(--border-color);
 	color: var(--text-secondary);
+}
+
+.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }

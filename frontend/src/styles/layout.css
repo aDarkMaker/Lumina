@@ -30,7 +30,9 @@
 
 .content-scroll {
 	flex: 1;
+	overflow-x: hidden;
 	overflow-y: auto;
+	touch-action: pan-y;
 	padding: 0 calc(24px + env(safe-area-inset-right, 0px))
 		calc(120px + env(safe-area-inset-bottom, 0px)) calc(24px + env(safe-area-inset-left, 0px));
 }

@@ -1,5 +1,5 @@
 .header {
-	padding: calc(16px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-right, 0px))
+	padding: calc(24px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-right, 0px))
 		16px calc(24px + env(safe-area-inset-left, 0px));
 	display: flex;
 	align-items: center;

@@ -60,19 +60,27 @@
 	height: 48px;
 	min-width: 48px;
 	border-radius: 12px;
-	background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+	background: transparent;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 24px;
-	color: #fff;
+	color: var(--text-secondary);
+	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.privacy-term-icon--placeholder {
+	background: rgba(255, 255, 255, 0.06);
 }
 
 .privacy-term-icon img {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+	object-position: center;
 	border-radius: inherit;
+	display: block;
 }
 
 .privacy-term-info {
