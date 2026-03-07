@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="frontend/src/assets/icons/icon.png" width="80" alt="烛照" />
   # 烛照 / Lumina
 
   ![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge&logo=android)
