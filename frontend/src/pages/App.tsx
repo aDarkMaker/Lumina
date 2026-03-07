@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { App as CapacitorApp } from '@capacitor/app'
 import type { AppListItem, AppListSortOption } from '../ts/AppList'
+import { getAppList } from '../ts/AppList'
 import type { NavView } from '../components/BottomNav'
 import { BottomNav } from '../components/BottomNav'
 import { Home } from './Home'
@@ -57,6 +60,9 @@ export function App() {
 	const [selectedApp, setSelectedApp] = useState<AppListItem | null>(null)
 	const [closingApp, setClosingApp] = useState<AppListItem | null>(null)
 	const [detailVisible, setDetailVisible] = useState(false)
+	const [directDetailFromHome, setDirectDetailFromHome] = useState(false)
+	const [listSlideVisible, setListSlideVisible] = useState(false)
+	const [showListSlideEffect, setShowListSlideEffect] = useState(false)
 	const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const [showRiskBadge, setShowRiskBadgeState] = useState(readShowRiskBadge)
@@ -151,6 +157,8 @@ export function App() {
 
 	const handleNavigate = (nextView: NavView) => {
 		if (nextView !== 'apps') setSelectedApp(null)
+		if (nextView === 'apps') setDirectDetailFromHome(false)
+		setShowListSlideEffect(false)
 		if (nextView !== 'settings') setSettingsOverlay(null)
 		if (nextView !== 'privacy') setSelectedPrivacyTerm(null)
 		setView(nextView)
@@ -158,6 +166,7 @@ export function App() {
 
 	const handlePrivacyTermBack = () => {
 		if (selectedPrivacyTerm) {
+			clearListTapHighlight()
 			setClosingPrivacyTerm(selectedPrivacyTerm)
 			setSelectedPrivacyTerm(null)
 		}
@@ -169,21 +178,63 @@ export function App() {
 		if (closingPrivacyTerm) setClosingPrivacyTerm(null)
 	}
 
+	const clearListTapHighlight = () => {
+		;(document.activeElement as HTMLElement | null)?.blur()
+	}
+
 	const handleBack = () => {
 		if (selectedApp) {
+			clearListTapHighlight()
 			setClosingApp(selectedApp)
 			setSelectedApp(null)
 		}
 	}
 
+	const handleSelectApp = (app: AppListItem) => {
+		clearListTapHighlight()
+		setSelectedApp(app)
+	}
+
+	const handleSelectRiskApp = (packageName: string) => {
+		getAppList().then((apps) => {
+			const app = apps.find((a) => a.packageName === packageName)
+			if (app) {
+				setDirectDetailFromHome(true)
+				setView('apps')
+				setSelectedApp(app)
+			}
+		})
+	}
+
+	const handleShowAllApps = () => {
+		setShowListSlideEffect(true)
+		setDirectDetailFromHome(false)
+		setSelectedApp(null)
+		setView('apps')
+	}
+
 	const handleSettingsOverlayBack = () => {
+		clearListTapHighlight()
 		setClosingSettingsOverlay(true)
 	}
+
+	useEffect(() => {
+		if (view === 'apps' && !directDetailFromHome && showListSlideEffect) {
+			setListSlideVisible(false)
+			const t = setTimeout(() => setListSlideVisible(true), ENTER_DELAY_MS)
+			return () => clearTimeout(t)
+		}
+		if (!showListSlideEffect) setListSlideVisible(true)
+		else setListSlideVisible(false)
+	}, [view, directDetailFromHome, showListSlideEffect])
 
 	const handleDetailTransitionEnd = (e: React.TransitionEvent) => {
 		if (e.target !== e.currentTarget) return
 		if (e.propertyName !== 'transform') return
-		if (closingApp) setClosingApp(null)
+		if (closingApp) {
+			setClosingApp(null)
+			setDirectDetailFromHome(false)
+		}
 	}
 
 	const handleSettingsOverlayTransitionEnd = (e: React.TransitionEvent) => {
@@ -195,10 +246,67 @@ export function App() {
 		}
 	}
 
+	const backStateRef = useRef<{
+		selectedApp: AppListItem | null
+		selectedPrivacyTerm: PrivacyTermsItem | null
+		settingsOverlay: SettingsOverlayType
+		setClosingApp: (v: AppListItem | null) => void
+		setSelectedApp: (v: AppListItem | null) => void
+		setClosingPrivacyTerm: (v: PrivacyTermsItem | null) => void
+		setSelectedPrivacyTerm: (v: PrivacyTermsItem | null) => void
+		setClosingSettingsOverlay: (v: boolean) => void
+	} | null>(null)
+	backStateRef.current = {
+		selectedApp,
+		selectedPrivacyTerm,
+		settingsOverlay,
+		setClosingApp,
+		setSelectedApp,
+		setClosingPrivacyTerm,
+		setSelectedPrivacyTerm,
+		setClosingSettingsOverlay,
+	}
+
+	useEffect(() => {
+		if (!Capacitor.isNativePlatform()) return
+		let cancelled = false
+		let listenerHandle: { remove: () => void } | null = null
+		CapacitorApp.addListener('backButton', () => {
+			const r = backStateRef.current
+			if (!r) return
+			if (r.selectedApp) {
+				;(document.activeElement as HTMLElement | null)?.blur()
+				r.setClosingApp(r.selectedApp)
+				r.setSelectedApp(null)
+			} else if (r.selectedPrivacyTerm) {
+				;(document.activeElement as HTMLElement | null)?.blur()
+				r.setClosingPrivacyTerm(r.selectedPrivacyTerm)
+				r.setSelectedPrivacyTerm(null)
+			} else if (r.settingsOverlay === 'userAgreement') {
+				;(document.activeElement as HTMLElement | null)?.blur()
+				r.setClosingSettingsOverlay(true)
+			} else {
+				CapacitorApp.exitApp()
+			}
+		}).then((h: { remove: () => void }) => {
+			if (cancelled) h.remove()
+			else listenerHandle = h
+		})
+		return () => {
+			cancelled = true
+			listenerHandle?.remove()
+		}
+	}, [])
+
 	return (
 		<div className="lumina-root">
 			<div className="view-container">
-				{view === 'home' && <Home />}
+				{view === 'home' && (
+					<Home
+						onSelectRiskApp={handleSelectRiskApp}
+						onShowAllApps={handleShowAllApps}
+					/>
+				)}
 				{view === 'privacy' && (
 					<>
 						<div className="app-views">
@@ -214,8 +322,8 @@ export function App() {
 									onTransitionEnd={handlePrivacyDetailTransitionEnd}
 								>
 									<PrivacyTermDetail
-										key={(selectedPrivacyTerm ?? closingPrivacyTerm)?.id}
-										term={selectedPrivacyTerm ?? closingPrivacyTerm}
+										key={showPrivacyDetail.id}
+										term={showPrivacyDetail}
 										onBack={handlePrivacyTermBack}
 									/>
 								</div>
@@ -250,18 +358,22 @@ export function App() {
 					</>
 				)}
 				{view === 'apps' && (
-					<>
+					<div className="view-apps-wrap">
 						<div className="app-views">
-							<div className="app-view app-list-view">
-								<AppListPage
-									showRiskBadge={showRiskBadge}
-									sortBy={appListSort}
-									onSelectApp={setSelectedApp}
-								/>
-							</div>
+							{!directDetailFromHome && (
+								<div
+									className={`app-view app-list-view ${showListSlideEffect ? `app-list-view--slide ${listSlideVisible ? 'app-list-view--visible' : ''}` : ''}`}
+								>
+									<AppListPage
+										showRiskBadge={showRiskBadge}
+										sortBy={appListSort}
+										onSelectApp={handleSelectApp}
+									/>
+								</div>
+							)}
 							{showDetail && (
 								<div
-									className={`app-view app-detail-view ${detailVisible && !isClosing ? 'visible' : ''} ${isClosing ? 'closing' : ''}`}
+									className={`app-view app-detail-view ${detailVisible && !isClosing ? 'visible' : ''} ${isClosing ? 'closing' : ''} ${directDetailFromHome ? 'app-detail-view--full' : ''}`}
 									onTransitionEnd={handleDetailTransitionEnd}
 								>
 									<AppDetail
@@ -272,7 +384,7 @@ export function App() {
 								</div>
 							)}
 						</div>
-					</>
+					</div>
 				)}
 			</div>
 			<BottomNav activeView={view} onNavigate={handleNavigate} />

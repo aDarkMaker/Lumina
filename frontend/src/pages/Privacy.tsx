@@ -54,7 +54,9 @@ export function Privacy({ privacyTermsSort, onSelectTerm }: PrivacyProps) {
 										className="privacy-term-row"
 										onClick={() => onSelectTerm(item)}
 									>
-										<div className="privacy-term-icon">
+										<div
+											className={`privacy-term-icon ${item.appIcon ? '' : 'privacy-term-icon--placeholder'}`}
+										>
 											{item.appIcon ? (
 												<img src={item.appIcon} alt="" />
 											) : (

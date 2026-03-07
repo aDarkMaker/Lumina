@@ -1,24 +1,63 @@
 import { useEffect, useState } from 'react'
-import { getAppList } from '../ts/AppList'
+import { getAppList, getDeviceRiskSummary, getCachedDeviceRiskSummary } from '../ts/AppList'
 
 export interface HomeRiskItem {
 	id: string
 	name: string
 	icon: string
 	iconBg: string
+	/** 应用图标 data URL，有则优先展示 */
+	iconImage?: string
 	tag: string
 	tagType: 'danger' | 'warning'
 }
 
-export function Home() {
+export interface HomeProps {
+	onSelectRiskApp?: (packageName: string) => void
+	onShowAllApps?: () => void
+}
+
+export function Home({ onSelectRiskApp, onShowAllApps }: HomeProps) {
 	const [analyzedCount, setAnalyzedCount] = useState(0)
+	const [riskPermissionCount, setRiskPermissionCount] = useState(0)
 	const [riskItems, setRiskItems] = useState<HomeRiskItem[]>([])
+	const [riskLoading, setRiskLoading] = useState(true)
 
 	useEffect(() => {
 		getAppList().then((apps) => setAnalyzedCount(apps.length))
 	}, [])
 
-	// 高风险行为列表后续从实际扫描结果实时获取并 setRiskItems，当前置空
+	function applyRiskSummary(data: { totalRiskPermissionCount: number; riskApps: { packageName: string; name: string; riskCount: number; icon?: string }[] }) {
+		setRiskPermissionCount(data.totalRiskPermissionCount)
+		setRiskItems(
+			data.riskApps.map((a) => ({
+				id: a.packageName,
+				name: a.name,
+				icon: 'ri-shield-keyhole-line',
+				iconBg: 'transparent',
+				iconImage: a.icon,
+				tag: `${a.riskCount} 项风险权限`,
+				tagType: (a.riskCount >= 5 ? 'danger' : 'warning') as 'danger' | 'warning',
+			})),
+		)
+	}
+
+	useEffect(() => {
+		const cached = getCachedDeviceRiskSummary()
+		if (cached) {
+			applyRiskSummary(cached)
+			setRiskLoading(false)
+			return
+		}
+		setRiskLoading(true)
+		getDeviceRiskSummary()
+			.then(applyRiskSummary)
+			.catch(() => {
+				setRiskPermissionCount(0)
+				setRiskItems([])
+			})
+			.finally(() => setRiskLoading(false))
+	}, [])
 
 	return (
 		<div className="mobile-screen">
@@ -63,7 +102,9 @@ export function Home() {
 							<div className="home-stat-icon">
 								<i className="ri-alert-line" aria-hidden />
 							</div>
-							<div className="home-stat-value">0</div>
+							<div className="home-stat-value">
+								{riskLoading ? '—' : riskPermissionCount}
+							</div>
 							<div className="home-stat-label">高风险权限</div>
 						</div>
 						<div className="home-stat-card home-stat-terms">
@@ -77,7 +118,11 @@ export function Home() {
 
 					<div className="home-section-header">
 						<span className="home-section-title">高风险权限</span>
-						<button type="button" className="home-section-more">
+						<button
+							type="button"
+							className="home-section-more"
+							onClick={onShowAllApps}
+						>
 							查看全部
 						</button>
 					</div>
@@ -85,27 +130,39 @@ export function Home() {
 					<ul className="home-risk-list">
 						{riskItems.length === 0 ? (
 							<li className="home-risk-empty">
-								<span>暂无高风险行为</span>
+								<span>{riskLoading ? '加载中…' : '暂无高风险行为'}</span>
 							</li>
 						) : (
 							riskItems.map((item) => (
 								<li key={item.id}>
-									<button type="button" className="home-risk-item">
+									<button
+										type="button"
+										className="home-risk-item"
+										onClick={() => onSelectRiskApp?.(item.id)}
+									>
 										<div className="home-risk-item-left">
 											<div
 												className="home-risk-app-icon"
-												style={{ background: item.iconBg }}
+												style={{ background: item.iconImage ? 'transparent' : item.iconBg }}
 											>
-												<i
-													className={item.icon}
-													aria-hidden
-													style={
-														item.iconBg.includes('78ffd6') ||
-														item.iconBg.includes('999')
-															? { color: '#000' }
-															: undefined
-													}
-												/>
+												{item.iconImage ? (
+													<img
+														src={item.iconImage}
+														alt=""
+														className="home-risk-app-icon-img"
+													/>
+												) : (
+													<i
+														className={item.icon}
+														aria-hidden
+														style={
+															item.iconBg.includes('78ffd6') ||
+															item.iconBg.includes('999')
+																? { color: '#000' }
+																: undefined
+														}
+													/>
+												)}
 											</div>
 											<div className="home-risk-app-info">
 												<span className="home-risk-app-name">

@@ -55,7 +55,9 @@ export function AppListPage({
 									className="app-list-row"
 									onClick={() => onSelectApp(app)}
 								>
-									<div className="app-list-icon">
+									<div
+										className={`app-list-icon ${app.icon ? '' : 'app-list-icon--placeholder'}`}
+									>
 										{app.icon ? (
 											<img src={app.icon} alt="" />
 										) : (
